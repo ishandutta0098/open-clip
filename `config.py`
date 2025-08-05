@@ -1,0 +1,7 @@
+import os
+
+class Config:
+    MODEL_NAME = "gpt-2"  # Change to your desired model
+    DATA_DIR = os.path.join(os.getcwd(), "data")  # Directory for preference pairs
+    OUTPUT_DIR = os.path.join(os.getcwd(), "output")  # Directory to save the model
+    EPOCHS = 3  # Number of training epochs

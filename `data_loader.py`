@@ -1,0 +1,28 @@
+import json
+import os
+from typing import List, Tuple
+
+class DataLoader:
+    def __init__(self, data_dir: str):
+        self.data_dir = data_dir
+
+    def load_data(self) -> List[Tuple[str, str]]:
+        """
+        Load preference pairs from JSON files in the specified directory.
+        Each JSON file should contain a list of preference pairs.
+        """
+        preference_pairs = []
+        for filename in os.listdir(self.data_dir):
+            if filename.endswith('.json'):
+                with open(os.path.join(self.data_dir, filename), 'r') as f:
+                    data = json.load(f)
+                    preference_pairs.extend(data['preference_pairs'])
+        return preference_pairs
+
+    def preprocess_data(self, preference_pairs: List[Tuple[str, str]]) -> List[Tuple[str, str]]:
+        """
+        Preprocess the preference pairs if necessary.
+        This can include tokenization, normalization, etc.
+        """
+        # Placeholder for preprocessing logic
+        return preference_pairs
