@@ -1,0 +1,42 @@
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from trl import DPOTrainer
+from data_loader import DataLoader
+
+class DPOTraining:
+    def __init__(self, model_name: str, data_dir: str, output_dir: str, epochs: int = 3):
+        self.model_name = model_name
+        self.data_dir = data_dir
+        self.output_dir = output_dir
+        self.epochs = epochs
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+        self.model = AutoModelForCausalLM.from_pretrained(model_name)
+
+    def train(self):
+        data_loader = DataLoader(self.data_dir)
+        preference_pairs = data_loader.load_data()
+        processed_data = data_loader.preprocess_data(preference_pairs)
+
+        trainer = DPOTrainer(
+            model=self.model,
+            tokenizer=self.tokenizer,
+            preference_pairs=processed_data,
+            epochs=self.epochs,
+            output_dir=self.output_dir
+        )
+
+        trainer.train()
+
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Train a chat model using DPO.")
+    parser.add_argument("--model_name", type=str, required=True, help="Pretrained model name or path.")
+    parser.add_argument("--data_dir", type=str, required=True, help="Directory containing preference pairs.")
+    parser.add_argument("--output_dir", type=str, required=True, help="Directory to save the trained model.")
+    parser.add_argument("--epochs", type=int, default=3, help="Number of training epochs.")
+
+    args = parser.parse_args()
+
+    dpo_training = DPOTraining(args.model_name, args.data_dir, args.output_dir, args.epochs)
+    dpo_training.train()
