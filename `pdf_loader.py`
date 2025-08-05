@@ -1,0 +1,19 @@
+import os
+from PyPDF2 import PdfReader
+from typing import List
+
+class PDFLoader:
+    def __init__(self, file_path: str):
+        self.file_path = file_path
+
+    def load(self) -> str:
+        """Load text from a PDF file."""
+        if not os.path.exists(self.file_path):
+            raise FileNotFoundError(f"The file {self.file_path} does not exist.")
+        
+        text = ""
+        with open(self.file_path, "rb") as file:
+            reader = PdfReader(file)
+            for page in reader.pages:
+                text += page.extract_text() + "\n"
+        return text.strip()

@@ -1,0 +1,51 @@
+from langchain.chains import RetrievalQA
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.vectorstores import FAISS
+from langchain.llms import OpenAI
+from pdf_loader import PDFLoader
+from text_splitter import TextSplitter
+
+class RAGPipeline:
+    def __init__(self, pdf_path: str):
+        self.pdf_loader = PDFLoader(pdf_path)
+        self.text_splitter = TextSplitter()
+        self.vector_store = None
+
+    def load_and_split(self):
+        """Load PDF and split text into chunks."""
+        text = self.pdf_loader.load()
+        chunks = self.text_splitter.split(text)
+        return chunks
+
+    def create_vector_store(self, chunks):
+        """Create a vector store from text chunks."""
+        embeddings = OpenAIEmbeddings()
+        self.vector_store = FAISS.from_texts(chunks, embeddings)
+
+    def answer_query(self, query: str) -> str:
+        """Answer a query using the RAG pipeline."""
+        if self.vector_store is None:
+            raise ValueError("Vector store is not created. Please run create_vector_store first.")
+        
+        retriever = self.vector_store.as_retriever()
+        qa_chain = RetrievalQA.from_chain_type(
+            llm=OpenAI(),
+            chain_type="stuff",
+            retriever=retriever
+        )
+        return qa_chain.run(query)
+
+if __name__ == "__main__":
+    pdf_path = "path/to/your/document.pdf"  # Update this path
+    rag_pipeline = RAGPipeline(pdf_path)
+    
+    # Load and split the PDF
+    chunks = rag_pipeline.load_and_split()
+    
+    # Create the vector store
+    rag_pipeline.create_vector_store(chunks)
+    
+    # Example query
+    query = "What is the main topic of the document?"
+    answer = rag_pipeline.answer_query(query)
+    print("Answer:", answer)
