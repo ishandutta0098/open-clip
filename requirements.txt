@@ -1,0 +1,6 @@
+diffusers>=0.15
+transformers>=4.25
+accelerate>=0.15
+torch>=1.12
+Pillow>=9.0
+typing-extensions>=3.7
