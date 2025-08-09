@@ -1,0 +1,18 @@
+# Production-ready requirements for text2image script using HuggingFace Diffusers
+# Note: ensure you install PyTorch matching your hardware (cpu/cuda) prior to installing these packages.
+
+# Core diffusion pipeline and tokenizer helpers
+diffusers>=0.14.0
+transformers>=4.25.0
+accelerate>=0.16.0
+
+# PyTorch (select appropriate wheel for your environment, CPU or CUDA)
+# Example (CPU only): torch==2.0.1+cpu
+# For CUDA, use the appropriate torch wheel, e.g., torch==2.0.1+cu118
+
+# Imaging utilities
+Pillow>=9.0.0
+numpy>=1.19.0
+
+# Optional tooling for progress and UX improvements
+tqdm>=4.60.0
