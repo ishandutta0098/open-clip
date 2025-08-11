@@ -1,0 +1,1 @@
+diffusers>=0.16\ntorch>=1.13\ntransformers>=4.25\naccelerate>=0.15\nPillow>=9\n
