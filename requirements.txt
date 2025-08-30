@@ -1,0 +1,6 @@
+torch>=2.0
+diffusers>=0.28
+transformers>=4.28
+accelerate>=0.14
+Pillow>=9
+tqdm>=4.60
