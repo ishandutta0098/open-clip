@@ -1,0 +1,9 @@
+diffusers>=0.18.0
+transformers>=4.30.0
+torch>=2.0.0
+accelerate>=0.20.0
+safetensors
+huggingface-hub
+xformers; platform_system != 'Windows'
+pillow
+numpy
